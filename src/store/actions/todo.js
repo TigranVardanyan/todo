@@ -4,7 +4,7 @@ import axios from "axios";
 export const getNotes = () => {
     console.log("getNotes")
     return dispatch => {
-        axios.get("https://todo-13203-default-rtdb.firebaseio.com/orders.json")
+        axios.get("https://todo-13203-default-rtdb.firebaseio.com/notes.json")
             .then(r => {
                 console.log("R",r)
                 dispatch(getNotesSuccess(r.data))
@@ -30,13 +30,20 @@ export const getNotesFail = (event) => {
     };
 };
 
-export const addNote = (note) => {
+export const addNote = (e) => {
+    e.preventDefault()
     console.log("addNote")
+    const note = {
+        'title': e.target['title'].value,
+        'note': e.target['note'].value,
+    }
     return dispatch => {
         axios.post("https://todo-13203-default-rtdb.firebaseio.com/notes.json", note)
             .then(r => {
-                console.log("R",r)
-                dispatch(addNoteSuccess(r.data))
+                console.log("[addNote] response",r)
+                dispatch(addNoteSuccess(r))
+                e.target['title'].value = "";
+                e.target['note'].value = "";
             })
             .catch(err => {
                 console.log("ERR",err)
@@ -46,6 +53,7 @@ export const addNote = (note) => {
 }
 
 export const addNoteSuccess = (note) => {
+    console.log('[addNoteSuccess]')
     return {
         type: actionTypes.ADD_NOTE_SUCCESS,
         payload: note
@@ -53,6 +61,7 @@ export const addNoteSuccess = (note) => {
 }
 
 export const addNoteFail = (error) => {
+    console.log("[addNoteFail]")
     return {
         type: actionTypes.ADD_NOTE_FAIL,
         payload: error

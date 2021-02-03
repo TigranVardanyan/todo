@@ -29,6 +29,8 @@ const ToDo = (props) => {
                     id="note"
                     label="Note"
                     name={"note"}
+                    multiline
+                    rows={4}
                 />
                 </div>
                 <Fab
